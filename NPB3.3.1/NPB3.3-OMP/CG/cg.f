@@ -303,6 +303,9 @@ c
       write (*, 2000) timer_read(T_init)
  2000 format(' Initialization time = ',f15.3,' seconds')
 
+#ifdef HOOKS
+      call roi_begin
+#endif
       call timer_start( T_bench )
 
 c---------------------------------------------------------------------
@@ -372,6 +375,9 @@ c---------------------------------------------------------------------
 c---------------------------------------------------------------------
 c  End of timed section
 c---------------------------------------------------------------------
+#ifdef HOOKS
+      call roi_end
+#endif
 
       t = timer_read( T_bench )
 
