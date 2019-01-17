@@ -10,13 +10,20 @@ OBJS = is.o \
        ${COMMON}/c_print_results.o \
        ${COMMON}/c_timers.o \
        ${COMMON}/c_wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 
 ${PROGRAM}: config ${OBJS}
 	${CLINK} ${CLINKFLAGS} -o ${PROGRAM} ${OBJS} ${C_LIB}
 
 .c.o:
+ifeq (${HOOKS}, 1)
+	${CCOMPILE} -DHOOKS $<
+else
 	${CCOMPILE} $<
+endif
 
 is.o:             is.c  npbparams.h
 

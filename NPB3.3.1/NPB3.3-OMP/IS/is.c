@@ -254,6 +254,8 @@ void    timer_start( int n );
 void    timer_stop( int n );
 double  timer_read( int n );
 
+void roi_begin_();
+void roi_end_();
 
 /*
  *    FUNCTION RANDLC (X, A)
@@ -982,6 +984,9 @@ int main( int argc, char **argv )
 /*  Start timer  */             
     timer_start( 0 );
 
+#ifdef HOOKS
+       roi_begin_();
+#endif
 
 /*  This is the main iteration */
     for( iteration=1; iteration<=MAX_ITERATIONS; iteration++ )
@@ -995,6 +1000,9 @@ int main( int argc, char **argv )
     timer_stop( 0 );
     timecounter = timer_read( 0 );
 
+#ifdef HOOKS
+       roi_end_();
+#endif
 
 /*  This tests that keys are in sequence: sorting of last ranked key seq
     occurs here, but is an untimed operation                             */
