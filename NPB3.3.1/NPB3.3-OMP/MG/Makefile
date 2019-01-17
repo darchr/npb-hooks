@@ -6,6 +6,9 @@ include ../config/make.def
 
 OBJS = mg.o ${COMMON}/print_results.o  \
        ${COMMON}/${RAND}.o ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 include ../sys/make.common
 
@@ -13,7 +16,11 @@ ${PROGRAM}: config ${OBJS}
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 mg.o:		mg.f globals.h npbparams.h
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS mg.f
+else
 	${FCOMPILE} mg.f
+endif
 
 clean:
 	- rm -f *.o *~ 

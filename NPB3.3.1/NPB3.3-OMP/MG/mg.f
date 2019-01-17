@@ -85,7 +85,6 @@ c---------------------------------------------------------------------------c
 !$    integer  omp_get_max_threads
 !$    external omp_get_max_threads
 
-
       do i = T_init, T_last
          call timer_clear(i)
       end do
@@ -237,6 +236,10 @@ c---------------------------------------------------------------------
       write( *,'(A,F15.3,A/)' ) 
      >     ' Initialization time: ',tinit, ' seconds'
 
+#ifdef HOOKS
+      call roi_begin
+#endif
+
       do i = T_bench, T_last
          call timer_clear(i)
       end do
@@ -269,6 +272,10 @@ c---------------------------------------------------------------------
       call timer_stop(T_bench)
 
       t = timer_read(T_bench)
+
+#ifdef HOOKS
+      call roi_end
+#endif
 
       verified = .FALSE.
       verify_value = 0.0
