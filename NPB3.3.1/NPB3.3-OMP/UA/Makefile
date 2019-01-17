@@ -8,6 +8,9 @@ include ../config/make.def
 OBJS = ua.o convect.o diffuse.o adapt.o move.o mason.o \
        precond.o utils.o verify.o setup.o \
        ${COMMON}/print_results.o ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 include ../sys/make.common
 
@@ -35,7 +38,11 @@ ua-au: ${OBJS} transfer_au.o
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM}.au ${OBJS} transfer_au.o ${F_LIB}
 
 .f.o:
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS $<
+else
 	${FCOMPILE} $<
+endif
 
 ua.o:        ua.f       header.h npbparams.h
 setup.o:     setup.f    header.h npbparams.h

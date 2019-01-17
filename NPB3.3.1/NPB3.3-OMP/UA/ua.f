@@ -161,6 +161,10 @@ c.........reset the solution and start the timer, keep track of total no elms
 
           call r_init(ta1,ntot,0.d0)
 
+#ifdef HOOKS
+       call roi_begin
+#endif
+
           time = 0.d0
           nelt_tot = 0.d0
           do i = 1, t_last
@@ -240,7 +244,11 @@ c.......perform mesh adaptation
 
       call timer_stop(1)
       tmax = timer_read(1)
-       
+
+#ifdef HOOKS
+       call roi_end
+#endif
+
       call verify(class, verified)
 
 c.....compute millions of collocation points advanced per second.
