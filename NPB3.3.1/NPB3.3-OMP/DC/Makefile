@@ -9,6 +9,9 @@ include ../sys/make.common
 OBJS = adc.o dc.o extbuild.o rbt.o jobcntl.o \
 	${COMMON}/c_print_results.o  \
 	${COMMON}/c_timers.o ${COMMON}/c_wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 
 # npbparams.h is provided for backward compatibility with NPB compilation
@@ -18,7 +21,11 @@ ${PROGRAM}: config ${OBJS}
 	${CLINK} ${CLINKFLAGS} -o ${PROGRAM} ${OBJS} ${C_LIB}
 
 .c.o:
+ifeq (${HOOKS}, 1)
+	${CCOMPILE} -DHOOKS $<
+else
 	${CCOMPILE} $<
+endif
 
 adc.o:      adc.c npbparams.h
 dc.o:       dc.c adcc.h adc.h macrodef.h npbparams.h
