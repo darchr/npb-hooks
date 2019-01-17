@@ -84,7 +84,6 @@ c   not affect the results.
 !$    external omp_get_max_threads
       data             dum /1.d0, 1.d0, 1.d0/
 
-
       open(unit=2, file='timer.flag', status='old', iostat=fstatus)
       if (fstatus .eq. 0) then
          timers_enabled = .true.
@@ -140,6 +139,10 @@ c   sure these initializations cannot be eliminated as dead code.
       if (timers_enabled) call timer_clear(2)
       if (timers_enabled) call timer_clear(3)
 !$omp end parallel
+
+#ifdef HOOKS
+      call roi_begin
+#endif
       call timer_start(1)
 
       t1 = a
@@ -236,6 +239,10 @@ c        vectorizable.
 
       call timer_stop(1)
       tm  = timer_read(1)
+
+#ifdef HOOKS
+      call roi_end
+#endif
 
       nit=0
       verified = .true.
