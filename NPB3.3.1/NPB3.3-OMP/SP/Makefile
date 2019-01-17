@@ -10,6 +10,9 @@ OBJS = sp.o initialize.o exact_solution.o exact_rhs.o \
        x_solve.o ninvr.o y_solve.o pinvr.o    \
        z_solve.o tzetar.o add.o txinvr.o error.o verify.o  \
        ${COMMON}/print_results.o ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 include ../sys/make.common
 
@@ -27,7 +30,11 @@ ${PROGRAM}: config ${OBJS}
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 .f.o:
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS $<
+else
 	${FCOMPILE} $<
+endif
 
 sp.o:             sp.f  header.h npbparams.h
 initialize.o:     initialize.f  header.h npbparams.h
