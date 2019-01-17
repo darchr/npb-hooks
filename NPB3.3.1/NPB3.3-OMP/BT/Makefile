@@ -11,6 +11,9 @@ OBJS = bt.o  initialize.o exact_solution.o exact_rhs.o \
        x_solve$(VEC).o y_solve$(VEC).o solve_subs.o  \
        z_solve$(VEC).o add.o error.o verify.o \
        ${COMMON}/print_results.o ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+	OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 include ../sys/make.common
 
@@ -37,7 +40,11 @@ exec: $(OBJS)
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 .f.o:
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS $<
+else
 	${FCOMPILE} $<
+endif
 
 
 bt.o:             bt.f  header.h npbparams.h

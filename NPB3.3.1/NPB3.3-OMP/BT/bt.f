@@ -141,6 +141,10 @@ c---------------------------------------------------------------------
        call adi
        call initialize
 
+#ifdef HOOKS
+       call roi_begin
+#endif
+
        do i = 1, t_last
           call timer_clear(i)
        end do
@@ -160,6 +164,10 @@ c---------------------------------------------------------------------
 
        call timer_stop(1)
        tmax = timer_read(1)
+
+#ifdef HOOKS
+       call roi_end
+#endif
        
        call verify(niter, class, verified)
 
