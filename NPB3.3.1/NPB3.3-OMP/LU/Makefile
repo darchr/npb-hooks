@@ -11,6 +11,9 @@ OBJS = lu.o read_input.o \
        jacld.o blts$(VEC).o jacu.o buts$(VEC).o error.o syncs.o \
        pintgr.o verify.o ${COMMON}/print_results.o \
        ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 include ../sys/make.common
 
@@ -38,7 +41,11 @@ exec: $(OBJS)
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 .f.o :
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS $<
+else
 	${FCOMPILE} $<
+endif
 
 lu.o:		lu.f applu.incl npbparams.h
 blts$(VEC).o:	blts$(VEC).f
