@@ -8,6 +8,9 @@ include ../sys/make.common
 
 OBJS = ft.o ${COMMON}/${RAND}.o ${COMMON}/print_results.o \
        ${COMMON}/timers.o ${COMMON}/wtime.o
+ifeq (${HOOKS}, 1)
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+endif
 
 ${PROGRAM}: config ${OBJS}
 	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
@@ -15,7 +18,11 @@ ${PROGRAM}: config ${OBJS}
 
 
 .f.o:
+ifeq (${HOOKS}, 1)
+	${FCOMPILE} -DHOOKS $<
+else
 	${FCOMPILE} $<
+endif
 
 ft.o:             ft.f  global.h npbparams.h
 

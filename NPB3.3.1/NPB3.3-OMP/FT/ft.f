@@ -117,6 +117,9 @@ c---------------------------------------------------------------------
       do i = 1, t_max
          call timer_clear(i)
       end do
+#ifdef HOOKS
+      call roi_begin
+#endif
 
       call timer_start(T_total)
       if (timers_enabled) call timer_start(T_setup)
@@ -150,6 +153,10 @@ c         call checksum(iter, u2, dims(1), dims(2), dims(3))
 
       call timer_stop(t_total)
       total_time = timer_read(t_total)
+
+#ifdef HOOKS
+      call roi_end
+#endif
 
       if( total_time .ne. 0. ) then
          mflops = 1.0d-6*float(ntotal) *
