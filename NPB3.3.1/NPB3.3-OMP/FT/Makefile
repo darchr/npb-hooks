@@ -9,11 +9,11 @@ include ../sys/make.common
 OBJS = ft.o ${COMMON}/${RAND}.o ${COMMON}/print_results.o \
        ${COMMON}/timers.o ${COMMON}/wtime.o
 ifeq (${HOOKS}, 1)
-        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o ${COMMON}/m5_mmap.o
 endif
 
 ${PROGRAM}: config ${OBJS}
-	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
+	${FLINK} ${FLINKFLAGS} -no-pie -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 
 

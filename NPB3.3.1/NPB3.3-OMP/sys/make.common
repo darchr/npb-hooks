@@ -40,7 +40,7 @@ ${COMMON}/wtime.o: ${COMMON}/${WTIME} ../config/make.def
 	cd ${COMMON}; ${CCOMPILE} ${MACHINE} -o wtime.o ${COMMON}/${WTIME}
 # Adding ROI hooks
 ${COMMON}/hooks.o: ${COMMON}/hooks.c ../config/make.def
-	cd ${COMMON}; ${CCOMPILE} hooks.c ../m5op_x86.S -Wno-implicit-function-declaration -I ../include-gem5/
+	cd ${COMMON}; ${CCOMPILE} hooks.c m5op_x86.S m5_mmap.c -Wno-implicit-function-declaration -I ../include-gem5/
 # For most machines or CRAY or IBM
 #	cd ${COMMON}; ${CCOMPILE} ${MACHINE} ${COMMON}/wtime.c
 # For a precise timer on an SGI Power Challenge, try:

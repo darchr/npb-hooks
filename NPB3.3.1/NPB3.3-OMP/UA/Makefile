@@ -9,7 +9,7 @@ OBJS = ua.o convect.o diffuse.o adapt.o move.o mason.o \
        precond.o utils.o verify.o setup.o \
        ${COMMON}/print_results.o ${COMMON}/timers.o ${COMMON}/wtime.o
 ifeq (${HOOKS}, 1)
-        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o ${COMMON}/m5_mmap.o
 endif
 
 include ../sys/make.common
@@ -17,10 +17,10 @@ include ../sys/make.common
 # npbparams.h is included by header.h
 # The following rule should do the trick but many make programs (not gmake)
 # will do the wrong thing and rebuild the world every time (because the
-# mod time on header.h is not changed. One solution would be to 
+# mod time on header.h is not changed. One solution would be to
 # touch header.h but this might cause confusion if someone has
 # accidentally deleted it. Instead, make the dependency on npbparams.h
-# explicit in all the lines below (even though dependence is indirect). 
+# explicit in all the lines below (even though dependence is indirect).
 
 # header.h: npbparams.h
 
@@ -32,10 +32,10 @@ ${PROGRAM}: config ${OBJS}
 	fi
 
 ua-lk: ${OBJS} transfer.o
-	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} transfer.o ${F_LIB}
+	${FLINK} ${FLINKFLAGS} -no-pie -o ${PROGRAM} ${OBJS} transfer.o ${F_LIB}
 
 ua-au: ${OBJS} transfer_au.o
-	${FLINK} ${FLINKFLAGS} -o ${PROGRAM}.au ${OBJS} transfer_au.o ${F_LIB}
+	${FLINK} ${FLINKFLAGS} -no-pie -o ${PROGRAM}.au ${OBJS} transfer_au.o ${F_LIB}
 
 .f.o:
 ifeq (${HOOKS}, 1)
