@@ -12,7 +12,7 @@ OBJS = lu.o read_input.o \
        pintgr.o verify.o ${COMMON}/print_results.o \
        ${COMMON}/timers.o ${COMMON}/wtime.o
 ifeq (${HOOKS}, 1)
-        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o ${COMMON}/m5_mmap.o
 endif
 
 include ../sys/make.common
@@ -21,10 +21,10 @@ include ../sys/make.common
 # npbparams.h is included by applu.incl
 # The following rule should do the trick but many make programs (not gmake)
 # will do the wrong thing and rebuild the world every time (because the
-# mod time on header.h is not changed. One solution would be to 
+# mod time on header.h is not changed. One solution would be to
 # touch header.h but this might cause confusion if someone has
 # accidentally deleted it. Instead, make the dependency on npbparams.h
-# explicit in all the lines below (even though dependence is indirect). 
+# explicit in all the lines below (even though dependence is indirect).
 
 # applu.incl: npbparams.h
 
@@ -38,7 +38,7 @@ ${PROGRAM}: config
 	fi
 
 exec: $(OBJS)
-	${FLINK} ${FLINKFLAGS} -o ${PROGRAM} ${OBJS} ${F_LIB}
+	${FLINK} ${FLINKFLAGS} -no-pie -o ${PROGRAM} ${OBJS} ${F_LIB}
 
 .f.o :
 ifeq (${HOOKS}, 1)

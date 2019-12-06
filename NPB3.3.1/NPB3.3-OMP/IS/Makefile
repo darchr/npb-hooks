@@ -11,12 +11,12 @@ OBJS = is.o \
        ${COMMON}/c_timers.o \
        ${COMMON}/c_wtime.o
 ifeq (${HOOKS}, 1)
-        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o
+        OBJS += ${COMMON}/hooks.o ${COMMON}/m5op_x86.o ${COMMON}/m5_mmap.o
 endif
 
 
 ${PROGRAM}: config ${OBJS}
-	${CLINK} ${CLINKFLAGS} -o ${PROGRAM} ${OBJS} ${C_LIB}
+	${CLINK} ${CLINKFLAGS} -no-pie -o ${PROGRAM} ${OBJS} ${C_LIB}
 
 .c.o:
 ifeq (${HOOKS}, 1)
